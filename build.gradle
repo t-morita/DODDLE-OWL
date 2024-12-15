@@ -43,7 +43,7 @@ test {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'org.doddle_owl.DODDLE_OWL'
+        attributes 'Main-Class': 'io.github.doddle_owl.DODDLE_OWL'
     }
 }
 
@@ -62,22 +62,23 @@ runtime {
     imageZip = file("$buildDir/doddle-owl-${version}.zip")
 
     jpackage {
-        // Windows and macOS
         outputDir = 'my-packaging'
         mainJar = "doddle-owl-${version}.jar"
         imageName = "doddle-owl-${version}"
         skipInstaller = false
         installerName = "doddle-owl"
-        // macOS
-//        jpackageHome = '/Library/Java/JavaVirtualMachines/jdk-16.0.1.jdk/Contents/Home'
-//        imageOptions = ['--verbose', '--icon', './src/main/resources/images/doddle-owl.icns']
-        // Windows
-        jpackageHome = 'C:/Program Files/Java/jdk-17.0.1'
-        installerType = 'msi'
-        imageOptions = ['--icon', './src/main/resources/images/doddle-owl.ico']
-        installerOptions = ['--vendor', 'Takeshi Morita', '--win-shortcut']
+        if (org.gradle.internal.os.OperatingSystem.current().windows) {
+            jpackageHome = 'C:/Program Files/Java/jdk-17.0.1'
+            installerType = 'msi'
+            imageOptions = ['--icon', './src/main/resources/images/doddle-owl.ico']
+            installerOptions = ['--vendor', 'Takeshi Morita', '--win-shortcut']
+        } else if (org.gradle.internal.os.OperatingSystem.current().macOsX) {
+            jpackageHome = '/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home'
+            installerType = 'dmg'
+            imageOptions = ['--verbose', '--icon', './src/main/resources/images/doddle-owl.icns']
+            installerOptions = ['--vendor', 'Takeshi Morita']
+        }
     }
-
 }
 
 tasks.runtime.doLast {
@@ -102,7 +103,7 @@ tasks.runtime.doLast {
 shadowJar {
     mergeServiceFiles()
     manifest {
-        attributes 'Main-Class': 'org.doddle_owl.DODDLE_OWL'
+        attributes 'Main-Class': 'io.github.doddle_owl.DODDLE_OWL'
     }
     archiveFileName = "doddle-owl-${version}.jar"
     exclude 'jpwn_dict_1.1/'
