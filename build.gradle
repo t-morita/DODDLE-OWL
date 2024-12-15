@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'application'
     id "org.beryx.runtime" version "1.13.1"
-    id "com.github.johnrengelman.shadow" version "8.1.1"
+    id "com.github.johnrengelman.shadow" version "7.0.0"
     id 'maven-publish'
     id 'idea'
 }
@@ -22,7 +22,7 @@ repositories {
 }
 
 wrapper {
-    gradleVersion = '8.8'
+    gradleVersion = '7.3'
 }
 
 tasks.withType(JavaCompile) {
